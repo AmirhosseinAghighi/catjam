@@ -2,77 +2,80 @@ import * as vscode from "vscode";
 import { Logger } from "./logger";
 import { Actions, WebViewController } from "./webViewController";
 import { Core } from "./core";
+import { Store } from "./store";
+
+const viewType: string = "catjam";
 
 export function activate(context: vscode.ExtensionContext) {
   const logger: Logger = Logger.getInstance();
   logger.debug('Congratulations, your extension "catjam" is now active!');
 
   let activeEditor = vscode.window.activeTextEditor;
-  let onCharTyped: (character?: string) => void = (c) => {};
 
-  const disposable = vscode.commands.registerCommand("catjam.start", () => {
-    const core = Core.getInstance();
-    const panel = WebViewController.getInstance();
-    panel.createWebview(context);
-    const updateInterval = setInterval(() => {
-      core.updateStates((status, data) => {
-        panel.postMessage(Actions.UpdateSpeed, { speed: data.speed });
-        panel.postMessage(Actions.UpdateWPM, { wpm: data.wpm });
-        logger.debug(
-          `Status: ${status}, Speed: ${data.speed}, WPM: ${data.wpm}`
-        );
-      });
-    }, 1000);
-
-    onCharTyped = (character) => {
-      if (activeEditor) {
-        core.charTyped();
-        if (character) {
-          panel.postMessage(Actions.CharacterTyped, {
-            character,
+  const store = new Store(context);
+  const core = Core.getInstance(store);
+  const webViewProvider = WebViewController.getInstance(context, store);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(viewType, webViewProvider)
+  );
+  const charTyped = (editor: vscode.TextDocumentChangeEvent) => {
+    if (editor.contentChanges.length === 1) {
+      const change = editor.contentChanges[0];
+      if (change.text.length === 1 && change.rangeLength === 0) {
+        const typedChar = change.text;
+        if (typedChar !== "\n" && typedChar !== "\t") {
+          webViewProvider.postMessage(Actions.CharacterTyped, {
+            character: typedChar,
           });
         }
       }
-    };
+    }
+  };
 
-    panel.onDidDispose(
-      () => {
-        clearInterval(updateInterval);
-        onCharTyped = () => {};
-      },
-      null,
-      context
-    );
+  const updateInterval = setInterval(() => {
+    const newData = core.updateStates();
+    if (newData && newData.videoSpeed !== undefined) {
+      if (newData.paused) {
+        webViewProvider.postMessage(Actions.Pause, {
+          type: newData.typingData.name,
+        });
+        return;
+      }
+      webViewProvider.postMessage(Actions.UpdateSpeed, {
+        speed: newData.videoSpeed,
+      });
+      webViewProvider.postMessage(Actions.UpdateValue, {
+        type: newData.typingData.name,
+        value: newData.typingData.value.toFixed(0),
+        average: newData.typingData.average.toFixed(0),
+      });
+    }
+  }, 1000);
+
+  webViewProvider.onDidDispose(() => {
+    clearInterval(updateInterval);
   });
 
-  vscode.window.onDidChangeActiveTextEditor(
-    (editor) => {
-      activeEditor = editor;
-    },
-    null,
-    context.subscriptions
-  );
+  vscode.window.onDidChangeActiveTextEditor((editor) => {
+    activeEditor = editor;
+  });
 
   vscode.workspace.onDidChangeTextDocument(
     (editor) => {
       if (activeEditor && editor.document === activeEditor.document) {
-        if (editor.contentChanges.length === 1) {
-          const change = editor.contentChanges[0];
-          if (change.text.length === 1 && change.rangeLength === 0) {
-            const typedChar = change.text;
-            if (typedChar !== "\n" && typedChar !== "\t") {
-              logger.debug(`User typed character: ${typedChar}`);
-              onCharTyped(typedChar);
-            }
-          }
+        const rangeLength = editor.contentChanges[0].rangeLength;
+        const rangeText = editor.contentChanges[0].text;
+        if (rangeText.length > 0) {
+          charTyped(editor);
+          core.keyPressed(editor.contentChanges[0].text);
+        } else {
+          core.textDeleted(editor.contentChanges[0].rangeLength);
         }
       }
     },
     null,
     context.subscriptions
   );
-
-  context.subscriptions.push(disposable);
 }
 
 export function deactivate() {}

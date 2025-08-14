@@ -9,7 +9,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "*",
+    "onWebviewPanel:catjam"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -18,7 +21,42 @@
         "title": "Start Cat Jam",
         "category": "Cat Jam"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "catjam",
+          "name": "Cat Jam",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Cat Jam Typing Test Settings",
+      "type": "object",
+      "properties": {
+        "catjam.speedCalculation": {
+          "type": "string",
+          "default": "WPM",
+          "enum": [
+            "KPM",
+            "WPM",
+            "NCS"
+          ],
+          "description": "Choose the typing speed calculation method",
+          "enumDescriptions": [
+            "Keystrokes Per Minute",
+            "Words Per Minute", 
+            "Net Coding Speed"
+          ]
+        },
+        "catjam.showBackspaceRatio": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show backspace ratio in the typing statistics"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
