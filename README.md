@@ -2,6 +2,8 @@
 
 A VS Code extension that displays a catjam meme synchronized with your typing speed!
 
+![Cat Jam Preview](https://github.com/AmirhosseinAghighi/catjam/blob/master/media/catjam.gif?raw=true)
+
 ## 🎯 Features
 
 - **Real-time Typing Metrics**: Track your typing speed with multiple calculation methods like WPM, KPM, NCS
@@ -87,4 +89,3 @@ Contributions are welcome!
 Feel free to submit issues and feature requests or even pull requests.
 
 **Enjoy coding with your new friend! 🐱✨**
-
