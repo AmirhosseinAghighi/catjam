@@ -1,71 +1,90 @@
-# catjam README
+# 🐱 Cat Jam - VS Code Extension
 
-This is the README for your extension "catjam". After writing up a brief description, we recommend including the following sections.
+A VS Code extension that displays a catjam meme synchronized with your typing speed!
 
-## Features
+## 🎯 Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Real-time Typing Metrics**: Track your typing speed with multiple calculation methods like WPM, KPM, NCS
+- **Synchronized Video**: The cat jams faster as you type faster!
 
-For example if there is an image subfolder under your extension project workspace:
+### Why?
 
-\!\[feature X\]\(images/feature-x.png\)
+After installing Spicetify, i found a fun extension to install, it was a catjam synchronized with music beats! [link to extension](https://github.com/BlafKing/spicetify-cat-jam-synced)
+One night while i was listening to music, i just got an idea! why don't we sync this with typing speed?
+After a little research, i found that we don't have many good typing tests in vscode, and i think it's a good place to test something like typing speed! so why not mix these two achievements and create a useful and fun extension?!
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 🚀 Getting Started
 
-## Requirements
+1. Install the extension from the VS Code Marketplace
+2. Open any project in VS Code
+3. Look for the "Cat Jam" panel in the Explorer sidebar
+4. Start typing and watch your feline friend jam along!
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
+## ⚙️ Extension Settings
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+### `catjam.speedCalculation`
 
-## Known Issues
+Choose your preferred typing speed calculation method:
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- **KPM** (Keystrokes Per Minute): Counts all keystrokes including special characters
+- **WPM** (Words Per Minute): Standard words per minute calculation (default)
+- **NCS** (Net Coding Speed): Specialized metric for coding activities
 
-## Release Notes
+### `catjam.showBackspaceRatio`
 
-Users appreciate release notes as you update your extension.
+- **Type**: boolean
+- **Default**: false
+- **Description**: Show backspace ratio
 
-### 1.0.0
+## 🛠️ Requirements
 
-Initial release of ...
+- Visual Studio Code version 1.103.0 or higher
+- No additional dependencies required!
 
-### 1.0.1
+## 🧪 Testing
 
-Fixed issue #.
+This extension includes comprehensive test coverage with unit tests, integration tests, and end-to-end testing scenarios. All tests have been written with the assistance of Claude 4 (Anthropic's AI assistant) to ensure thorough coverage and reliability. (i just ate chips while it was writing tests and testing them, it was a horror movie)
 
-### 1.1.0
+### Running Tests
 
-Added features X, Y, and Z.
+```bash
+pnpm run test
+```
 
----
+### Development
 
-## Following extension guidelines
+```bash
+# Install dependencies
+pnpm install
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+# Compile TypeScript
+pnpm run compile
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+# Watch mode for development
+pnpm run watch
 
-## Working with Markdown
+# Linting
+pnpm run lint
+```
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 📝 Release Notes
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### 0.0.1
 
-## For more information
+Initial release of Cat Jam:
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+- Basic cat animation synchronized to typing speed
+- Multiple speed calculation methods (KPM, WPM, NCS)
+- Explorer panel integration
+- Session tracking with idle detection
+- Configurable settings for speed calculation and backspace ratio display
 
-**Enjoy!**
+## 🤝 Contributing
+
+Contributions are welcome!
+Feel free to submit issues and feature requests or even pull requests.
+
+**Enjoy coding with your new friend! 🐱✨**
+

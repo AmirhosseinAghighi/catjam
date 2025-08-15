@@ -15,13 +15,6 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "catjam.start",
-        "title": "Start Cat Jam",
-        "category": "Cat Jam"
-      }
-    ],
     "views": {
       "explorer": [
         {
