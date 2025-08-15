@@ -46,7 +46,7 @@
           "description": "Choose the typing speed calculation method",
           "enumDescriptions": [
             "Keystrokes Per Minute",
-            "Words Per Minute", 
+            "Words Per Minute",
             "Net Coding Speed"
           ]
         },
@@ -67,14 +67,16 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.102.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
+    "@types/sinon": "^17.0.4",
+    "@types/vscode": "^1.102.0",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
-    "eslint": "^9.32.0",
-    "typescript": "^5.9.2",
     "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.32.0",
+    "sinon": "^21.0.0",
+    "typescript": "^5.9.2"
   }
 }
