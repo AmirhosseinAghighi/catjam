@@ -2,7 +2,13 @@
   "name": "catjam",
   "displayName": "catjam",
   "description": "make a cat appear next to your project jamming along your typing synchronized to your type speed",
+  "publisher": "duckwichtrust",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmirhosseinAghighi/catjam"
+  },
   "version": "0.0.1",
+  "icon": "icons/myIcon.png",
   "engines": {
     "vscode": "^1.103.0"
   },
@@ -10,8 +16,6 @@
     "Other"
   ],
   "activationEvents": [
-    "*",
-    "onWebviewPanel:catjam"
   ],
   "main": "./out/extension.js",
   "contributes": {

@@ -210,6 +210,7 @@ export class WebViewController implements vscode.WebviewViewProvider {
           flex-direction: column;
           height: 100vh;
           padding: 20px;
+          box-sizing: border-box;
         }
 
         video {
@@ -236,9 +237,23 @@ export class WebViewController implements vscode.WebviewViewProvider {
           display: inline-block;
         }
 
-        .value-overlay {
+        .overlay-box {
           position: absolute;
-          bottom: 8px;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: max-content;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+
+        .value-overlay {
           background: rgba(0, 0, 0, 0.6);
           padding: 4px 8px;
           border-radius: 8px;
@@ -266,13 +281,23 @@ export class WebViewController implements vscode.WebviewViewProvider {
           }
         }
 
-        @media (max-width: 500px) {
+        @media screen and (max-width: 500px) {
           #wpm {
             font-size: 1rem;
           }
           .value-overlay {
             font-size: 0.8rem;
             padding: 3px 6px;
+          }
+        }
+
+
+
+        @media screen and (max-width: 150px) {
+          .overlay-box {
+            flex-direction: column;
+            justify-content: center;
+            align-items: end;
           }
         }
     `;
@@ -310,8 +335,10 @@ export class WebViewController implements vscode.WebviewViewProvider {
           <video autoplay loop muted id="catjam">
             <source src="${sanitizedVideo}" type="video/mp4" />
           </video>
-          <div class="value-overlay" style="right:12px;" id="valueOverlay">${defaultType}: IDLE</div>
-          <div class="value-overlay" style="left:12px;" id="averageOverlay">${defaultType} average: ${defaultAverage}</div>
+          <div class="overlay-box">
+          <div class="value-overlay" id="averageOverlay">${defaultType} average: ${defaultAverage}</div>
+            <div class="value-overlay" id="valueOverlay">${defaultType}: IDLE</div>
+          </div>
         </div>
         
         <script>
