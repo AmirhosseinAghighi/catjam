@@ -32,7 +32,7 @@
       "title": "Cat Jam Typing Test Settings",
       "type": "object",
       "properties": {
-        "catjam.speedCalculation": {
+        "catjam.calculationType": {
           "type": "string",
           "default": "WPM",
           "enum": [

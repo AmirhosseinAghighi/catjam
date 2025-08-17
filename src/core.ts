@@ -10,6 +10,17 @@ export enum currentStatus {
   SESSION_ENDED,
 }
 
+interface TypingData {
+  backRatio: number;
+  typingData: {
+    name: CalculationType;
+    value: number;
+    average: number;
+  };
+  videoSpeed: number;
+  paused?: boolean;
+}
+
 export class Core {
   private static instance: Core;
   private logger: Logger = Logger.getInstance();
@@ -92,7 +103,7 @@ export class Core {
     return result;
   }
 
-  private calculateMetrics() {
+  private calculateMetrics(): TypingData {
     const backRatio = this.calculateBackRatio();
     const selectedCalculationType = this.store.getSetting<CalculationType>(
       SettingKeys.CALCULATION_TYPE
@@ -112,7 +123,8 @@ export class Core {
     }
 
     const currentTime = new Date().getTime();
-    let typingData = {} as { name: string; value: number };
+    let typingData = {} as { name: CalculationType; value: number };
+    let videoSpeed: number = 0;
 
     switch (selectedCalculationType) {
       case CalculationType.WPM:
@@ -120,12 +132,14 @@ export class Core {
           name: CalculationType.WPM,
           value: this.calculateWPM(currentTime),
         };
+        videoSpeed = this.calculateVideoSpeed(typingData.value);
         break;
       case CalculationType.KPM:
         typingData = {
           name: CalculationType.KPM,
           value: this.calculateKPM(currentTime),
         };
+        videoSpeed = this.calculateVideoSpeed(typingData.value) / 5;
         break;
       case CalculationType.NCS:
         typingData = {
@@ -153,7 +167,16 @@ export class Core {
   }
 
   private calculateBackRatio() {
-    return this.deletedCharacters / this.totalCharacters;
+    const isBackRatioActive = this.store.getSetting<CalculationType>(
+      SettingKeys.SHOW_BACK_RATIO
+    );
+    if (!isBackRatioActive) {
+      return -1;
+    }
+    if (this.deleteCount === 0 || this.totalCharacters === 0) {
+      return 0;
+    }
+    return (this.deleteCount / this.totalCharacters) * 100;
   }
 
   private calculateWPM(currentTime: number) {
@@ -174,7 +197,7 @@ export class Core {
     const GrossKPM = this.calculateKPM(currentTime);
     const errorRate = this.deletedCharacters / this.totalCharacters;
     const result = GrossKPM * (1 - errorRate);
-    return result >= 0 ? result : 0;
+    return result;
   }
 
   private calculateVideoSpeed(value?: number): number {
@@ -183,7 +206,7 @@ export class Core {
     }
 
     const speed = value / catjamBPM;
-    const result = Math.max(0, Math.min(speed, 2));
+    const result = Math.max(0, Math.min(speed, 10));
 
     return result >= 0 ? result : 0;
   }

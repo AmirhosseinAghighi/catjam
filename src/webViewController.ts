@@ -4,16 +4,23 @@ import { CalculationType, SettingKeys, Store } from "./store";
 
 export enum Actions {
   UpdateSpeed = "updateSpeed",
-  UpdateValue = "updateWPM",
+  UpdateValue = "updateValue",
+  UpdateBackRatio = "updateBackRatio",
   CharacterTyped = "characterTyped",
   Pause = "pause",
 }
 
 type PostMessagePayloads = {
   [Actions.UpdateSpeed]: { speed: number };
-  [Actions.UpdateValue]: { type: string; value: string; average: string };
+  [Actions.UpdateValue]: {
+    type: string;
+    value: string;
+    average: string;
+    backRatio: string;
+  };
   [Actions.CharacterTyped]: { character: string };
   [Actions.Pause]: { type: string };
+  [Actions.UpdateBackRatio]: { backRatio: string };
 };
 
 export class WebViewController implements vscode.WebviewViewProvider {
@@ -118,6 +125,7 @@ export class WebViewController implements vscode.WebviewViewProvider {
           const overlayContainer = document.getElementById('overlayContainer');
           const valueElement = document.getElementById('valueOverlay');
           const averageElement = document.getElementById('averageOverlay');
+          const backRatioOverlay = document.getElementById('backRatioOverlay');
 
           // initial speed
           catjamVideo.defaultPlaybackRate = 0;
@@ -147,7 +155,19 @@ export class WebViewController implements vscode.WebviewViewProvider {
                 if (!isNaN(average)) {
                   averageElement.textContent = data.type + " average: " + average;
                 }
-                break;
+              break;
+
+              case "${Actions.UpdateBackRatio}":
+                const backRatio = parseFloat(data.backRatio);
+                if (!isNaN(backRatio)) {
+                  if (backRatio < 0) {
+                    backRatioOverlay.style.display = "none";
+                  } else {
+                    backRatioOverlay.style.display = "block";
+                    backRatioOverlay.textContent = "Backspace Ratio: " + backRatio + "%";
+                  }
+                }
+              break;
 
               case "${Actions.Pause}":
                 valueElement.textContent = "Current " + data.type + ": IDLE"
@@ -239,8 +259,6 @@ export class WebViewController implements vscode.WebviewViewProvider {
 
         .overlay-box {
           position: absolute;
-          bottom: 0;
-          left: 0;
           width: 100%;
           height: max-content;
           display: flex;
@@ -335,12 +353,16 @@ export class WebViewController implements vscode.WebviewViewProvider {
           <video autoplay loop muted id="catjam">
             <source src="${sanitizedVideo}" type="video/mp4" />
           </video>
-          <div class="overlay-box">
-          <div class="value-overlay" id="averageOverlay">${defaultType} average: ${defaultAverage}</div>
-            <div class="value-overlay" id="valueOverlay">${defaultType}: IDLE</div>
+          <div class="overlay-box" style="bottom: 0; left: 0;">
+            <div class="value-overlay" id="averageOverlay">${defaultType} average: ${defaultAverage}</div>
+              <div class="value-overlay" id="valueOverlay">${defaultType}: IDLE</div>
+            </div>
           </div>
-        </div>
         
+          <div class="overlay-box" style="top: 0; left: 0;">
+            <div class="value-overlay" id="backRatioOverlay">Backspace Ratio: 0</div>
+            </div>
+          </div>
         <script>
           ${this.getWebviewScript()}
         </script>

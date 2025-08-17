@@ -2,20 +2,20 @@ import * as vscode from "vscode";
 
 export enum SettingKeys {
   CALCULATION_TYPE = "calculationType",
-  SHOW_BACK_RATIO = "showBackRatio",
+  SHOW_BACK_RATIO = "showBackspaceRatio",
 }
 
 export enum CalculationType {
-  WPM = "wpm",
-  KPM = "kpm",
-  NCS = "ncs",
+  WPM = "WPM",
+  KPM = "KPM",
+  NCS = "NCS",
 }
 
 export class Store {
-  private static instance: Store;
   private context: vscode.ExtensionContext;
-  private webViewController: vscode.WebviewViewProvider | undefined;
   private settings = new Map<SettingKeys, string | boolean>();
+  private configuration: vscode.WorkspaceConfiguration =
+    vscode.workspace.getConfiguration("catjam");
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -23,6 +23,7 @@ export class Store {
   }
 
   public loadSettings(): void {
+    this.configuration = vscode.workspace.getConfiguration("catjam");
     this.loadSetting(SettingKeys.CALCULATION_TYPE, CalculationType.WPM);
     this.loadSetting(SettingKeys.SHOW_BACK_RATIO, false);
   }
@@ -54,6 +55,6 @@ export class Store {
   }
 
   private loadSetting(key: SettingKeys, defaultValue: string | boolean): void {
-    this.settings.set(key, this.context.globalState.get(key, defaultValue));
+    this.settings.set(key, this.configuration.get(key, defaultValue));
   }
 }

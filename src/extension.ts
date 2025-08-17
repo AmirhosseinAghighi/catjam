@@ -48,6 +48,10 @@ export function activate(context: vscode.ExtensionContext) {
         type: newData.typingData.name,
         value: newData.typingData.value.toFixed(0),
         average: newData.typingData.average.toFixed(0),
+        backRatio: newData.backRatio.toFixed(2),
+      });
+      webViewProvider.postMessage(Actions.UpdateBackRatio, {
+        backRatio: newData.backRatio.toFixed(2),
       });
     }
   }, 1000);
@@ -76,6 +80,10 @@ export function activate(context: vscode.ExtensionContext) {
     null,
     context.subscriptions
   );
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    store.loadSettings();
+  });
 }
 
 export function deactivate() {}

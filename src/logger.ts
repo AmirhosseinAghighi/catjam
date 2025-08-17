@@ -19,7 +19,7 @@ export class Logger {
 
   public static getInstance(): Logger {
     if (!Logger.instance) {
-      Logger.instance = new Logger("CatJam Logger", LogLevel.DEBUG);
+      Logger.instance = new Logger("CatJam Logger", LogLevel.WARN);
     }
     return Logger.instance;
   }
