@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { Logger } from "./logger";
 import { Actions, WebViewController } from "./webViewController";
 import { Core } from "./core";
-import { Store } from "./store";
+import { SettingKeys, Store } from "./store";
 
 const viewType: string = "catjam";
 
@@ -13,11 +13,18 @@ export function activate(context: vscode.ExtensionContext) {
   let activeEditor = vscode.window.activeTextEditor;
 
   const store = new Store(context);
-  const core = Core.getInstance(store);
+  // Load some data from configurations
+  let idleThreshold = parseInt(store.getSetting(SettingKeys.IDLE_THRESHOLD));
+  let updateIntervalTime = parseInt(
+    store.getSetting(SettingKeys.UPDATE_INTERVAL)
+  );
+
+  const core = Core.getInstance(store, idleThreshold);
   const webViewProvider = WebViewController.getInstance(context, store);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(viewType, webViewProvider)
   );
+
   const charTyped = (editor: vscode.TextDocumentChangeEvent) => {
     if (editor.contentChanges.length === 1) {
       const change = editor.contentChanges[0];
@@ -54,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
         backRatio: newData.backRatio.toFixed(2),
       });
     }
-  }, 1000);
+  }, updateIntervalTime);
 
   webViewProvider.onDidDispose(() => {
     clearInterval(updateInterval);
@@ -83,6 +90,12 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     store.loadSettings();
+    core.setSessionThreshold = parseInt(
+      store.getSetting(SettingKeys.IDLE_THRESHOLD)
+    );
+    updateIntervalTime = parseInt(
+      store.getSetting(SettingKeys.UPDATE_INTERVAL)
+    );
   });
 }
 

@@ -2,16 +2,20 @@
 
 A VS Code extension that displays a catjam meme synchronized with your typing speed!
 
+![Cat Jam Preview](https://github.com/AmirhosseinAghighi/catjam/blob/master/media/catjam.gif?raw=true)
+
 ## How To Install
+
 1. search for "catjam" in vscode extensions and install the extension.
 2. download the extension from [this link](https://marketplace.visualstudio.com/items?itemName=DuckWichTrust.catjam) and install the vsix file manually.
 
-![Cat Jam Preview](https://github.com/AmirhosseinAghighi/catjam/blob/master/media/catjam.gif?raw=true)
+#### [Project Github](https://marketplace.visualstudio.com/items?itemName=DuckWichTrust.catjam)
 
 ## 🎯 Features
 
 - **Real-time Typing Metrics**: Track your typing speed with multiple calculation methods like WPM, KPM, NCS
 - **Synchronized Video**: The cat jams faster as you type faster!
+- **Configurable**: This project includes useful configuration options.
 
 ### Why?
 

@@ -1,7 +1,6 @@
 import { Logger, LogLevel } from "./logger";
 import { CalculationType, SettingKeys, Store } from "./store";
 
-const sessionThreshold = 2000; // 2 second
 const catjamBPM = 102.85;
 
 export enum currentStatus {
@@ -31,14 +30,19 @@ export class Core {
   private deleteCount: number = 0;
   private totalCharacters: number = 0;
   private IDLE: boolean = true;
+  private sessionThreshold: number;
 
-  private constructor(store: Store) {
+  private constructor(store: Store, sessionThreshold: number) {
     this.store = store;
+    this.sessionThreshold = sessionThreshold;
   }
 
-  public static getInstance(store: Store): Core {
+  public static getInstance(
+    store: Store,
+    sessionThreshold: number = 2000
+  ): Core {
     if (!Core.instance) {
-      Core.instance = new Core(store);
+      Core.instance = new Core(store, sessionThreshold);
     }
     return Core.instance;
   }
@@ -47,6 +51,11 @@ export class Core {
     this.calculateWPM(new Date().getTime());
     this.typedCharacters = 0;
     this.sessionStart = -1;
+  }
+
+  set setSessionThreshold(threshold: number) {
+    this.sessionThreshold = threshold;
+    this.logger.debug(`Session threshold set to ${threshold} ms`);
   }
 
   public keyPressed(character: string): void {
@@ -81,7 +90,7 @@ export class Core {
       status = currentStatus.SESSION_STARTED;
       this.sessionStart = currentTime - 500;
     } else if (
-      currentTime - this.sessionStart > sessionThreshold &&
+      currentTime - this.sessionStart > this.sessionThreshold &&
       this.IDLE
     ) {
       status = currentStatus.SESSION_ENDED;

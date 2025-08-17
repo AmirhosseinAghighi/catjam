@@ -3,6 +3,8 @@ import * as vscode from "vscode";
 export enum SettingKeys {
   CALCULATION_TYPE = "calculationType",
   SHOW_BACK_RATIO = "showBackspaceRatio",
+  IDLE_THRESHOLD = "idleThreshold",
+  UPDATE_INTERVAL = "updateInterval",
 }
 
 export enum CalculationType {
@@ -26,6 +28,8 @@ export class Store {
     this.configuration = vscode.workspace.getConfiguration("catjam");
     this.loadSetting(SettingKeys.CALCULATION_TYPE, CalculationType.WPM);
     this.loadSetting(SettingKeys.SHOW_BACK_RATIO, false);
+    this.loadSetting(SettingKeys.IDLE_THRESHOLD, "2000");
+    this.loadSetting(SettingKeys.UPDATE_INTERVAL, "500");
   }
 
   public getSetting<T extends string | boolean>(key: SettingKeys): T {

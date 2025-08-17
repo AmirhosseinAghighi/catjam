@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/AmirhosseinAghighi/catjam"
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "icon": "icons/myIcon.png",
   "engines": {
     "vscode": "^1.49.0"
@@ -51,6 +51,19 @@
           "type": "boolean",
           "default": false,
           "description": "Show backspace ratio in the typing statistics"
+        }
+        ,
+        "catjam.idleThreshold": {
+          "type": "integer",
+          "default": 2000,
+          "minimum": 0,
+          "description": "Idle threshold in milliseconds. If no key is pressed within this time the user is considered idle."
+        },
+        "catjam.updateInterval": {
+          "type": "number",
+          "default": 500,
+          "minimum": 100,
+          "description": "Update interval in milliseconds. How often typing speed and statistics are recalculated."
         }
       }
     }
