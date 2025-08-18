@@ -5,9 +5,9 @@ A VS Code extension that displays a catjam meme synchronized with your typing sp
 ![Cat Jam Preview](https://github.com/AmirhosseinAghighi/catjam/blob/master/media/catjam.gif?raw=true)
 
 ## How To Install
-
-1. search for "catjam" in vscode extensions and install the extension.
-2. download the extension from [this link](https://marketplace.visualstudio.com/items?itemName=DuckWichTrust.catjam) and install the vsix file manually.
+search for "catjam" in vscode extensions and install the extension.
+OR 
+download the extension from [this link](https://marketplace.visualstudio.com/items?itemName=DuckWichTrust.catjam) and install the vsix file manually.
 
 #### [Project Github](https://marketplace.visualstudio.com/items?itemName=DuckWichTrust.catjam)
 
